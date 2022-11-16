@@ -1,33 +1,33 @@
-import logging
+import os
+import yaml
+import zipfile
 
-class logger:
-    def __init__(self, handler, type_) -> None:
-        self.logger = logging.getLogger("django_log")
-        self.level = self.logging_type(type_)
-        self.set_log_level()
-        self.set_handler(handler)
-    def logging_type(self, type_):
-        if type_ == "debug":
-            return logging.DEBUG
-        elif type_ == "info":
-            return logging.INFO
-        elif type_ == "warning":
-            return logging.WARNING
-        elif type_ == "error":
-            return logging.ERROR
-    def set_handler(self, handler):
-        if handler=="stream":
-            ch = logging.StreamHandler()
-            ch.setLevel(self.level)
-        else:
-            # from datetime import datetime
-            # ch = logging.FileHandler("log_"+str(datetime.now().strftime("%H:%M:%S")))
-            ch = logging.FileHandler("django_log")
-            ch.setLevel(self.level)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch.setFormatter(formatter)
-        self.logger.addHandler(ch)
-    def set_log_level(self):
-        self.logger.setLevel(self.level)
-    def log_msg(self, type_, msg):
-        self.logger.log(self.logging_type(type_), msg)
+def read_file(filename):
+    f = open(filename, "r")
+    data = f.readlines()
+    f.close()
+    return data
+
+def write_file(filename, data):
+    f = open(filename,  "w")
+    f.writelines(data)
+    f.close()
+
+def read_yml(filename):
+    f = open(filename, "r")
+    data = yaml.safe_load(f)
+    f.close()
+    return data
+
+def unzip_files(save_path, path_):
+    with zipfile.ZipFile(path_, 'r') as zf:
+        zf.extractall(path=save_path)
+
+def check_folder(folder):
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+
+def write_byte_file(content, path):
+    f = open(path, "wb")
+    f.write(content)
+    f.close()
