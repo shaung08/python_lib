@@ -1,7 +1,12 @@
 import logging
 
 class logger:
-    def __init__(self, handler, type_) -> None:
+    def __init__(self, handler, type_):
+        """
+        Args
+            handler     Logging handlers. "stream" "file"
+            type_       Set debug mode. "debug" "info" "warning" "error"
+        """
         self.logger = logging.getLogger("django_log")
         self.level = self.logging_type(type_)
         self.set_log_level()
