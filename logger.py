@@ -1,13 +1,14 @@
 import logging
 
 class logger:
-    def __init__(self, handler, type_):
+    def __init__(self, handler, type_, log_name="log", filename=None):
         """
         Args
             handler     Logging handlers. "stream" "file"
             type_       Set debug mode. "debug" "info" "warning" "error"
         """
-        self.logger = logging.getLogger("django_log")
+        self.filename = filename
+        self.logger = logging.getLogger(log_name)
         self.level = self.logging_type(type_)
         self.set_log_level()
         self.set_handler(handler)
@@ -25,9 +26,7 @@ class logger:
             ch = logging.StreamHandler()
             ch.setLevel(self.level)
         else:
-            # from datetime import datetime
-            # ch = logging.FileHandler("log_"+str(datetime.now().strftime("%H:%M:%S")))
-            ch = logging.FileHandler("django_log")
+            ch = logging.FileHandler(self.filename)
             ch.setLevel(self.level)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch.setFormatter(formatter)
